@@ -1,84 +1,80 @@
-export class Canvas {
-    constructor(w = 640, h = 480){
-        this.element = document.createElement("canvas");
-        this.context = this.element.getContext("2d");
-        this.element.width = w;
-        this.element.height = h;
-        document.querySelector("#game").append( this.element );
+export default class Canvas {
+    constructor(setting) {
+        this.set = setting
+        this.canvas = document.createElement('canvas')
+        this.ctx = this.canvas.getContext('2d') 
+        this.canvas.width = this.set.boxWidth
+        this.canvas.height = this.set.boxHeight
+        document.querySelector('#game').appendChild(this.canvas)
     }
 
-    fill(color) {
-        this.context.fillStyle = color;
-        this.context.fillRect(0, 0, this.element.width, this.element.height);
+    drawText(text, x, y, fontSize, color = this.set.textColor, align = "center", baseline = 'middle') {
+        this.ctx.fillStyle = color
+        this.ctx.font = `bold ${fontSize} 'Fira Mono', monospace`
+        this.ctx.textAlign = align
+        this.ctx.textBaseline = baseline
+        this.ctx.fillText(text, x, y)
     }
 
-    drawRect(x, y, w, h, color) {
-        this.context.fillStyle = color;
-        this.context.fillRect(x, y, w, h);
+    drawRectangle(x, y, width, height, color) {
+        this.ctx.fillStyle = color
+        this.ctx.fillRect(x, y, width, height)
     }
 
-    drawRectRound(x, y, width, height, radius, fill, stroke) {
-        if (typeof stroke == "undefined" ) {
-			stroke = true;
-		}
-		if (typeof radius === "undefined") {
-			radius = 5;
-		}
-		if (typeof radius === 'number') {
-			radius = {tl: radius, tr: radius, br: radius, bl: radius};
-		} else {
-			const defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
-			for (let side in defaultRadius) {
-				radius[side] = radius[side] || defaultRadius[side];
-			}
-		}
-		this.context.beginPath();
-		this.context.moveTo(x + radius.tl, y);
-		this.context.lineTo(x + width - radius.tr, y);
-		this.context.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-		this.context.lineTo(x + width, y + height - radius.br);
-		this.context.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
-		this.context.lineTo(x + radius.bl, y + height);
-		this.context.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
-		this.context.lineTo(x, y + radius.tl);
-		this.context.quadraticCurveTo(x, y, x + radius.tl, y);
-		this.context.closePath();
-
-		
-		if (fill) {
-			this.context.fillStyle = fill;
-			this.context.fill();
-		} 
-		if (stroke) {
-			this.context.strokeStyle = fill;
-			this.context.stroke();
-		}
+    drawLine(xS, yS, xF, yF, lineWidth, color) {
+        this.ctx.lineCap = 'round'
+        this.ctx.beginPath()
+        this.ctx.moveTo(xS, yS)
+        this.ctx.lineTo(xF, yF)
+        this.ctx.lineWidth = lineWidth 
+        this.ctx.strokeStyle = color
+        this.ctx.stroke()
+        this.ctx.closePath()
     }
 
-    drawCircle(x, y, r, lineWidth, color, fill = true){
-        this.context.beginPath();
-        this.context.lineWidth = lineWidth;
-        this.context.arc(x, y, r, 0, Math.PI * 2, true);
-        this.context.strokeStyle = color;
+    drawRectangleRound(x, y, width, height, radius, color) {
+        this.ctx.beginPath()
+        this.ctx.moveTo(x + radius, y)
+        this.ctx.lineTo(x + width - radius, y)
+        this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius)       
+        this.ctx.lineTo(x + width, y + height - radius)
+        this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height)        
+        this.ctx.lineTo(x + radius, y + height)
+        this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius)        
+        this.ctx.lineTo(x, y + radius)
+        this.ctx.quadraticCurveTo(x, y, x + radius, y)        
+        this.ctx.closePath()
+        this.ctx.fillStyle = color
+        this.ctx.fill()
+    }
 
-        if (fill) {
-            this.context.fillStyle = color;
-            this.context.fill();
-        
-            return;
+    drawArc(radius, sAngle, eAngle, color = this.set.textColor) {
+        const centerW = (this.set.boxWidth / 2)
+        const centerH = (this.set.boxHeight / 2)
+
+        this.ctx.lineCap = 'round'
+        this.ctx.beginPath()
+        this.ctx.arc(centerW, centerH, radius, sAngle, eAngle)
+        this.ctx.lineWidth = 6
+        this.ctx.strokeStyle = color
+        this.ctx.stroke()
+        this.ctx.closePath()
+    }
+
+    drawCircle(x, y, radius, fillColor, stroke = true) {
+        this.ctx.beginPath()
+        this.ctx.arc(x, y, radius, 0, Math.PI * 2) 
+        this.ctx.fillStyle = fillColor
+        this.ctx.fill()
+        if (stroke) {
+            this.ctx.lineWidth = 6
+            this.ctx.strokeStyle = this.set.lineColor
+            this.ctx.stroke()
         }
-
-        this.context.stroke();
-        this.context.closePath();
-    }
-
-    print(x, y, text, color) {
-        this.context.fillStyle = color;
-        this.context.font = "bold 20px sans-serif";
-        this.context.fillText(text, x, y);
+        this.ctx.closePath()
     }
 
     clear() {
-        this.context.clearRect(0, 0, this.element.width, this.element.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     }
 }

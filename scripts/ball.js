@@ -1,69 +1,98 @@
-import { Body } from "./body.js";
-
-export class Ball extends Body{
-    constructor(game, x, y, r, color) {
-        super(x,y);
-
-        this.game = game;
-        this.r = r;
-        this.width = this.r;
-        this.height = this.r;
-        this.color = color;
-        this.speed = 4000;
-        this.dx = this.speed;
-        this.dy = this.speed;
-        this.collisionShape = { x: this.x, y: this.y, width: this.r, height: this.r }
+export default class Ball {
+    constructor(Game) {
+        this.game = Game
+        this.set = Game.set
+        this.ball = Game.set.ball
+        this.print = Game.print
+    }  
+    
+    getRandom() {
+        return Math.random() * (1 - 0.8) + 0.8
     }
 
-    draw(){
-        this.game.screen.get("gamelayer").drawCircle(this.x, this.y, this.r, 0, this.color);
+    getRandomDirection() {
+        if (Boolean(Math.round(Math.random()))) {
+            return this.getRandom()
+        } else { return -this.getRandom() }
     }
 
-    spawn(time) {
-        this.x = this.game.screen.get("gamelayer").element.width / 2;
-        this.y = this.game.screen.get("gamelayer").element.height / 2;
-
-        this.dx *= -1;
-        this.dy *= time % 2 ? 1 : -1;
+    dropBall(player) {
+        this.ball.dx = this.getRandomDirection()
+        this.ball.dy = this.getRandomDirection()
+    
+        switch (player) {
+            case 'left':
+                this.ball.dx = Math.abs(this.ball.dx)
+                break
+            case 'right':
+                this.ball.dx = -Math.abs(this.ball.dx)
+                break
+        }
     }
 
-    update(time) {
-        // up
-        if(this.y <= 0) {
-            this.dy *= -1;
+    move() {
+        this.ball.x += (this.ball.dx * this.ball.speed)
+        this.ball.y += (this.ball.dy * this.ball.speed)
+    }
+
+    checkCollisionWithWalls() {
+    let ballX = (this.ball.x + this.ball.dx)
+    let ballY = (this.ball.y + this.ball.dy)
+    const rightWall = (this.set.boxWidth - this.set.ballRadius)
+    const leftWall = this.set.ballRadius
+    const TopWall = this.set.ballRadius
+    const BottomWall = (this.set.boxHeight - this.set.ballRadius)
+        if (ballX >= rightWall) {
+            this.ball.dx = this.reverseBall(this.ball.dx)
+            this.goalProcess(this.set.playerL)
         }
-
-        // down
-        if(this.y + this.r >= this.game.screen.get("gamelayer").element.height) {
-            this.dy *= -1;
+        if (ballX <= leftWall) {
+            this.ball.dx = this.reverseBall(this.ball.dx)
+            this.goalProcess(this.set.playerR)
         }
-
-        // right
-        if(this.x + this.r >= this.game.screen.get("gamelayer").element.width) {
-            this.game.player1.scoreInc();
-            this.game.UI.updateUI();
-            this.spawn(time);
+        if (ballY >= BottomWall || ballY <= TopWall) {
+            this.ball.dy = this.reverseBall(this.ball.dy)
         }
+    }
 
-        // left
-        if(this.x - this.r <= 0) {
-            this.game.player2.scoreInc();
-            this.game.UI.updateUI();
-            this.spawn(time);
-        }
+    reverseBall(dir) {
+        if (dir > 0) {
+            return -this.getRandom()
+        } else {
+            return this.getRandom()
+        }        
+    }
 
-        // collision player 1
-        if(this.game.collider.collides(this, this.game.player1)) {
-            this.dx *= -1;
-        }
+    goalProcess(winner) {
+        winner.score++
+        this.print.clear('score')
+        this.print.drawScore()
+        this.print.clear('text')
+        this.set.ballHitScore = 0
+        this.print.drawGoal(winner.goalPointX, winner.color, winner.align)
+        this.game.reStart(winner.align)
+    } 
 
-        // collision player 2
-        if(this.game.collider.collides(this, this.game.player2)) {
-            this.dx *= -1;
-        }
+    speedМagnifier() {
+        this.ball.speed += 0.1
+        this.set.ballHitScore++
+        this.print.clear('text')
+        this.print.drawBallHit()
+    }
 
-        this.bodyMove();
+    defaultSet() {
+        this.ball.x = this.set.ballXDefault
+        this.ball.y = this.set.ballYDefault
+        this.ball.speed = this.set.ballSpeed
+    }
 
-        super.update(time);
+    draw() {
+        this.print.drawBall()
+    }
+
+    update() {
+        this.checkCollisionWithWalls()
+        this.move()
+        this.draw()
     }
 }
