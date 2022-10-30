@@ -16,7 +16,7 @@ class Game {
 
     firstLaunch() {
         this.print.drawBackground()
-  		//this.support()
+  	    //this.support()
         this.playerL.draw()
         this.playerR.draw()
         this.print.drawScore()
@@ -39,8 +39,8 @@ class Game {
             this.start(this.reqId) }, '3200')
     }
 
-    start(Id) {
-        if (Id) {
+    start(reqId) {
+        if (reqId) {
             this.reqId = requestAnimationFrame((t) => this.timeLoop(t))
         }
     }
@@ -55,13 +55,8 @@ class Game {
         this.start(this.reqId)
     }
 
-    stop() {
-        cancelAnimationFrame(this.reqId)
-        this.reqId = false
-    }
-
     reStart(align) {
-        this.stop()
+        this.reqId = false
         setTimeout(() => {
             this.print.clear('gamelayer')
             this.playerL.defaultSet()
@@ -75,7 +70,7 @@ class Game {
             this.print.drawBallDirection()
         }, '800')
         setTimeout(() => {
-            this.print.clear('other')
+              this.print.clear('other')
             this.reqId = true
             this.start(this.reqId)
         }, '2400')

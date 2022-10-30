@@ -130,20 +130,27 @@ export default class Printer {
     }
 
     drawShadowPlayer(xS, yS, yF) {
-        this.supCan.drawLine(xS, yS, xS, yF, this.set.playerRadius * 2, this.set.supportColorYellow)
+        const color = this.set.supportColorYellow
+        const plWidth = (this.set.playerRadius * 2)
+
+        this.supCan.drawLine(xS, yS, xS, yF, plWidth, color)
     }
 
     drawYellowZone(x, yS, yF) {
-        this.supCan.drawLine(x, yS, this.set.boxWidth / 2, yS, 1, this.set.supportColorYellow)
-        this.supCan.drawLine(x, yF, this.set.boxWidth / 2, yF, 1, this.set.supportColorYellow)
+        const color = this.set.supportColorYellow
+        const center = (this.set.boxWidth / 2)
+
+        this.supCan.drawLine(x, yS, center, yS, 1, color)
+        this.supCan.drawLine(x, yF, center, yF, 1, color)
     }
 
     drawAngleZone() {
+        const color = this.set.supportColorRed
         const radius = (this.set.boxHeight / 4)
 
-        this.supCan.drawArc(radius, Math.PI * 0.2, Math.PI * 0.3, this.set.supportColorRed)
-        this.supCan.drawArc(radius, Math.PI * 0.7, Math.PI * 0.8, this.set.supportColorRed)
-        this.supCan.drawArc(radius, Math.PI * 1.2, Math.PI * 1.3, this.set.supportColorRed)
-        this.supCan.drawArc(radius, Math.PI * 1.7, Math.PI * 1.8, this.set.supportColorRed)
+        this.supCan.drawArc(radius, Math.PI * 0.2, Math.PI * 0.3, color)
+        this.supCan.drawArc(radius, Math.PI * 0.7, Math.PI * 0.8, color)
+        this.supCan.drawArc(radius, Math.PI * 1.2, Math.PI * 1.3, color)
+        this.supCan.drawArc(radius, Math.PI * 1.7, Math.PI * 1.8, color)
     }
 }

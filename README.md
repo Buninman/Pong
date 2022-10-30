@@ -1,7 +1,13 @@
 ![alt text](images/pongOG.png "preview png")
 
-### Implementation of the Pong game in JavaScript. For 2 players desktop gameplay only (⚆_⚆)
-⚠ To work, you need an http-server I used Live Server Extension in Visual Studio Code
+### Implementation of the Pong game in JavaScript.
+⚠ So far, only for 2 players desktop gameplay (⚆_⚆)
+
+You can play here:
+https://buninman.github.io/Pong/
+
+Code analysis with detailed explanations here:
+https://blog.buninman.ru/pong
 
 # What's new in the game?
 1. New design of the playing field
@@ -16,6 +22,10 @@
 3. The ball never flies 45°. Does not get hung up on one path.
 4. All settings in one JS file
 5. The code has become simpler
+
+⚠ To work, you need an http-server. I used Live Server Extension in Visual Studio Code
+
+---
 
 ![alt text](images/pong.gif "preview gif")
 <div align="center">New Pong on display 1972🕹</div>

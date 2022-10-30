@@ -30,16 +30,18 @@ export default class Player {
 
         if (this.up) {
             if (this.player.y > plBorder) {
-                this.player.y -= (1 * plSpeed)
+                this.player.y -= plSpeed
             } else { 
-                this.player.y = (0 + plBorder) }
+                this.player.y = plBorder
+            }
             this.shadowUp = (plSpeed * 2)
         }
         else if (this.down) {
             if ((this.player.y + plHeight + plBorder) < boxHeight) {
-                this.player.y += (1 * plSpeed)
+                this.player.y += plSpeed
             } else { 
-                this.player.y = (boxHeight - plHeight - plBorder) }
+                this.player.y = (boxHeight - plHeight - plBorder)
+            }
             this.shadowDown = (plSpeed * 2)
         } else {
             this.shadowUp = 0
@@ -64,46 +66,42 @@ export default class Player {
         let dx = this.ball.x - this.player.x
         let dy = this.ball.y - (this.player.y - this.shadowUp)
         let dyF = this.ball.y - (this.player.y + plHeight + this.shadowDown)
+        let radSum = this.set.ballRadius + this.set.playerRadius
         let dX = Math.sqrt(Math.pow(dx, 2))
         let dY = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
         let dYF = Math.sqrt(Math.pow(dx, 2) + Math.pow(dyF, 2))
         
-        if (dX <= this.set.ballRadius + this.set.playerRadius) {
+        if (dX <= radSum) {
             if (this.yellowZone && this.ballReversStatus) {
-                this.ball.dx = this.classBall.reverseBall(this.ball.dx)
-                this.classBall.speedМagnifier()
-                this.ballReversStatus = false
-                setTimeout(() => {
-                    this.ballReversStatus = true
-                }, '500')
+                this.hitBall(this.ball.dx)
             }
         }
         if (this.ball.dy > 0) {
-            if (dY <= this.set.ballRadius + this.set.playerRadius) {
+            if (dY <= radSum) {
                 if (!this.yellowZone) {
-                    this.ball.dy = this.classBall.reverseBall(this.ball.dy)
-                    this.ball.dx = this.classBall.reverseBall(this.ball.dx)
-                    this.classBall.speedМagnifier()
-                    this.ballReversStatus = false
-                    setTimeout(() => {
-                        this.ballReversStatus = true
-                    }, '500')
+                    this.hitBall(this.ball.dx, this.ball.dy)
                 }
             }
         }
-        if (this.ball.dy < 0) {  
-            if (dYF <= this.set.ballRadius + this.set.playerRadius) {
+        if (this.ball.dy < 0) {
+            if (dYF <= radSum) {
                 if (!this.yellowZone) {
-                    this.ball.dy = this.classBall.reverseBall(this.ball.dy)
-                    this.ball.dx = this.classBall.reverseBall(this.ball.dx)
-                    this.classBall.speedМagnifier()
-                    this.ballReversStatus = false
-                    setTimeout(() => {
-                        this.ballReversStatus = true
-                    }, '500')
+                    this.hitBall(this.ball.dx, this.ball.dy)
                 }
             }
         }
+    }
+    
+    hitBall(dx, dy) {
+        this.ball.dx = this.classBall.reverseBall(dx)
+        if (dy) {
+        this.ball.dy = this.classBall.reverseBall(dy)
+        }
+        this.classBall.speedМagnifier()
+        this.ballReversStatus = false
+        setTimeout(() => {
+            this.ballReversStatus = true
+        }, '500')    
     }
 
     defaultSet() {

@@ -16,11 +16,6 @@ export default class Canvas {
         this.ctx.fillText(text, x, y)
     }
 
-    drawRectangle(x, y, width, height, color) {
-        this.ctx.fillStyle = color
-        this.ctx.fillRect(x, y, width, height)
-    }
-
     drawLine(xS, yS, xF, yF, lineWidth, color) {
         this.ctx.lineCap = 'round'
         this.ctx.beginPath()
@@ -48,19 +43,6 @@ export default class Canvas {
         this.ctx.fill()
     }
 
-    drawArc(radius, sAngle, eAngle, color = this.set.textColor) {
-        const centerW = (this.set.boxWidth / 2)
-        const centerH = (this.set.boxHeight / 2)
-
-        this.ctx.lineCap = 'round'
-        this.ctx.beginPath()
-        this.ctx.arc(centerW, centerH, radius, sAngle, eAngle)
-        this.ctx.lineWidth = 6
-        this.ctx.strokeStyle = color
-        this.ctx.stroke()
-        this.ctx.closePath()
-    }
-
     drawCircle(x, y, radius, fillColor, stroke = true) {
         this.ctx.beginPath()
         this.ctx.arc(x, y, radius, 0, Math.PI * 2) 
@@ -71,6 +53,19 @@ export default class Canvas {
             this.ctx.strokeStyle = this.set.lineColor
             this.ctx.stroke()
         }
+        this.ctx.closePath()
+    }
+
+    drawArc(radius, sAngle, eAngle, color = this.set.textColor) {
+        const centerW = (this.set.boxWidth / 2)
+        const centerH = (this.set.boxHeight / 2)
+
+        this.ctx.lineCap = 'round'
+        this.ctx.beginPath()
+        this.ctx.arc(centerW, centerH, radius, sAngle, eAngle)
+        this.ctx.lineWidth = 6
+        this.ctx.strokeStyle = color
+        this.ctx.stroke()
         this.ctx.closePath()
     }
 
