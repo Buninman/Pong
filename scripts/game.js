@@ -26,17 +26,17 @@ class Game {
         this.print.centerText('3')
         setTimeout(() => {
             this.print.clear('text'),
-            this.print.centerText('2') }, '800')
+            this.print.centerText('2') }, 800)
         setTimeout(() => {
             this.print.clear('text'),
-            this.print.centerText('1') }, '1600')
+            this.print.centerText('1') }, 1600)
         setTimeout(() => {
             this.print.clear('text'),
-            this.print.centerText('Go')}, '2400')
+            this.print.centerText('Go')}, 2400)
         setTimeout(() => {
             this.print.clear('text'),
             this.print.clear('other')
-            this.start(this.reqId) }, '3200')
+            this.start(this.reqId) }, 3200)
     }
 
     start(reqId) {

@@ -101,7 +101,7 @@ export default class Player {
         this.ballReversStatus = false
         setTimeout(() => {
             this.ballReversStatus = true
-        }, '500')    
+        }, 500)    
     }
 
     defaultSet() {

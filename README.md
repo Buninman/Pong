@@ -8,6 +8,8 @@ https://buninman.github.io/Pong/
 
 Code analysis with detailed explanations here:
 https://blog.buninman.ru/pong
+or here:
+https://habr.com/ru/post/697870/
 
 # What's new in the game?
 1. New design of the playing field
